@@ -36,7 +36,7 @@
                 inputs: { url: url }
             });
             const furl = 'https://api.github.com/repos/petehuu/hae/actions/workflows/142889037/dispatches';
-
+            const data = '{"ref":"main", "inputs": {"url": "https://www.example.com"}}';
             console.log('data:', data);
             console.log('url:', furl);
 
@@ -44,7 +44,7 @@
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `token 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`
+                    //'Authorization': `token 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`
                 },
                 body: data
             });
