@@ -17,7 +17,7 @@
     <script>
         async function saveRequestFile() {
             const url = document.getElementById('urlInput').value;
-            const response = await fetch('https://api.github.com/repos/username/repository/contents/request.txt', {
+            const response = await fetch('https://api.github.com/repos/petehuu/hae/contents/request.txt', {
                 method: 'PUT',
                 headers: {
                     'Authorization': 'token YOUR_GITHUB_PERSONAL_ACCESS_TOKEN',
