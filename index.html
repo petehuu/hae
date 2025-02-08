@@ -31,7 +31,7 @@
     <script>
         async function saveRequestFile() {
             const url = document.getElementById('urlInput').value;
-            const response = await fetch('https://api.github.com/repos/petehuu/hae/dispatches', {
+            const response = await fetch('https://api.github.com/repos/petehuu/hae/actions/workflows/update-request.yml/dispatches', {
                 method: 'POST',
                 headers: {
                     'Authorization': 'token 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',
@@ -39,8 +39,8 @@
                     'Accept': 'application/vnd.github.v3+json'
                 },
                 body: JSON.stringify({
-                    event_type: 'update-request',
-                    client_payload: { url: url }
+                    ref: 'main', // Haara, jossa työnkulku sijaitsee
+                    inputs: { url: url } // Lähetetään URL osana syötettä
                 })
             });
             if (response.ok) {
