@@ -17,7 +17,7 @@ app.post('/dispatch', async (req, res) => {
     const { url } = req.body;
 
     try {
-        const response = await axios.post(`https://api.github.com/repos/USERNAME/REPOSITORY_NAME/actions/workflows/UPDATE_REQUEST_YML_FILE/dispatches`, {
+        const response = await axios.post(`https://api.github.com/repos/petehuu/hae/actions/workflows/142889037/dispatches`, {
             ref: 'main',
             inputs: { url: url }
         }, {
