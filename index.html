@@ -4,11 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Communicate via GitHub Actions</title>
+    <style>
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        textarea {
+            display: block;
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+        button {
+            margin-bottom: 1rem;
+        }
+    </style>
 </head>
 <body>
     <h1>Communicate via GitHub Actions</h1>
-    <textarea id="urlInput" rows="1" cols="50">Enter the URL here...</textarea>
-    <br>
+    <label for="urlInput">Enter the URL here:</label>
+    <textarea id="urlInput" rows="1" cols="50"></textarea>
     <button onclick="saveRequestFile()">Send Request</button>
     <br><br>
     <button onclick="loadResponseFile()">Load Response</button>
@@ -20,7 +34,7 @@
             const response = await fetch('https://api.github.com/repos/petehuu/hae/contents/request.txt', {
                 method: 'PUT',
                 headers: {
-                    'Authorization': `token ${YOUR_GITHUB_PERSONAL_ACCESS_TOKEN}`, // Tämän ei tule näkyä suoraan HTML-sivulla
+                    'Authorization': 'token YOUR_GITHUB_PERSONAL_ACCESS_TOKEN',
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
@@ -49,9 +63,7 @@
 
         async function getFileSha(path) {
             const response = await fetch(`https://api.github.com/repos/petehuu/hae/contents/${path}`, {
-                headers: {
-                    'Authorization': `token ${YOUR_GITHUB_PERSONAL_ACCESS_TOKEN}` // Tämän ei tule näkyä suoraan HTML-sivulla
-                }
+                headers: { 'Authorization': 'token YOUR_GITHUB_PERSONAL_ACCESS_TOKEN' }
             });
             if (!response.ok) return null;
             const data = await response.json();
