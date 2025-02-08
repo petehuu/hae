@@ -1,63 +1,35 @@
-const fs = require('fs');
-const http = require('http');
-const https = require('https');
-const path = require('path');
-
-const hostname = '127.0.0.1';
+const express = require('express');
+const axios = require('axios');
+const app = express();
 const port = 3000;
-const requestFilePath = path.join(__dirname, 'request.txt');
-const responseFilePath = path.join(__dirname, 'response.txt');
 
-function fetchURLContent(url, callback) {
-    https.get(url, (resp) => {
-        let data = '';
+// Lisää oma henkilökohtainen käyttöoikeustunnus (PAT) tähän
+const GITHUB_TOKEN = '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';
 
-        resp.on('data', (chunk) => {
-            data += chunk;
-        });
+app.use(express.json());
 
-        resp.on('end', () => {
-            callback(null, data);
-        });
+app.post('/dispatch', async (req, res) => {
+    const { url } = req.body;
 
-    }).on("error", (err) => {
-        callback(err, null);
-    });
-}
-
-function checkRequestFile() {
-    fs.readFile(requestFilePath, 'utf8', (err, url) => {
-        if (err) {
-            if (err.code !== 'ENOENT') {
-                console.error('Error reading request file:', err);
+    try {
+        const response = await axios.post(`https://api.github.com/repos/petehuu/hae/actions/workflows/142889037/dispatches`, {
+            ref: 'main',
+            inputs: { url: url }
+        }, {
+            headers: {
+                'Authorization': `token ${GITHUB_TOKEN}`,
+                'Content-Type': 'application/json',
+                'Accept': 'application/vnd.github.v3+json'
             }
-            return;
-        }
-
-        fetchURLContent(url.trim(), (err, data) => {
-            if (err) {
-                console.error('Error fetching URL content:', err);
-                return;
-            }
-
-            fs.writeFile(responseFilePath, data, 'utf8', (err) => {
-                if (err) {
-                    console.error('Error writing response file:', err);
-                } else {
-                    console.log('Response written to file');
-                }
-            });
         });
-    });
-}
 
-setInterval(checkRequestFile, 5000); // Check the request file every 5 seconds
-
-const server = http.createServer((req, res) => {
-    res.statusCode = 404;
-    res.end('Not Found');
+        res.status(200).send('Request sent successfully!');
+    } catch (error) {
+        console.error(`Error sending the request: ${error.response.status} ${error.response.statusText}`);
+        res.status(500).send(`Error sending the request: ${error.response.status} ${error.response.statusText}`);
+    }
 });
 
-server.listen(port, hostname, () => {
-    console.log(`Server running at http://${hostname}:${port}/`);
+app.listen(port, () => {
+    console.log(`Server running at http://localhost:${port}`);
 });
