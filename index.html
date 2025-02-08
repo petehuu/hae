@@ -20,7 +20,7 @@
             const response = await fetch('https://api.github.com/repos/petehuu/hae/contents/request.txt', {
                 method: 'PUT',
                 headers: {
-                    'Authorization': 'token YOUR_GITHUB_PERSONAL_ACCESS_TOKEN', // Tämä kohta korvataan työnkulussa turvallisesti GH_TOKENilla
+                    'Authorization': `token ${YOUR_GITHUB_PERSONAL_ACCESS_TOKEN}`, // Tämän ei tule näkyä suoraan HTML-sivulla
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
@@ -38,7 +38,7 @@
 
         async function loadResponseFile() {
             try {
-                const response = await fetch('https://raw.githubusercontent.com/petehuu/hae/branch/response.txt');
+                const response = await fetch('https://raw.githubusercontent.com/petehuu/hae/main/response.txt');
                 const data = await response.text();
                 document.getElementById('responseContent').textContent = data;
             } catch (error) {
@@ -49,7 +49,9 @@
 
         async function getFileSha(path) {
             const response = await fetch(`https://api.github.com/repos/petehuu/hae/contents/${path}`, {
-                headers: { 'Authorization': 'token YOUR_GITHUB_PERSONAL_ACCESS_TOKEN' } // Tämä kohta korvataan työnkulussa turvallisesti GH_TOKENilla
+                headers: {
+                    'Authorization': `token ${YOUR_GITHUB_PERSONAL_ACCESS_TOKEN}` // Tämän ei tule näkyä suoraan HTML-sivulla
+                }
             });
             if (!response.ok) return null;
             const data = await response.json();
