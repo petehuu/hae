@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Communicate via File</title>
+    <title>Communicate via GitHub Actions</title>
 </head>
 <body>
-    <h1>Communicate via File</h1>
+    <h1>Communicate via GitHub Actions</h1>
     <textarea id="urlInput" rows="1" cols="50">Enter the URL here...</textarea>
     <br>
     <button onclick="saveRequestFile()">Send Request</button>
@@ -15,25 +15,45 @@
     <pre id="responseContent">Waiting for response...</pre>
 
     <script>
-        function saveRequestFile() {
+        async function saveRequestFile() {
             const url = document.getElementById('urlInput').value;
-            const blob = new Blob([url], { type: 'text/plain' });
-            const link = document.createElement('a');
-            link.href = window.URL.createObjectURL(blob);
-            link.download = 'request.txt';
-            link.click();
-            window.URL.revokeObjectURL(link.href);
+            const response = await fetch('https://api.github.com/repos/username/repository/contents/request.txt', {
+                method: 'PUT',
+                headers: {
+                    'Authorization': 'token YOUR_GITHUB_PERSONAL_ACCESS_TOKEN',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    message: 'Add request URL',
+                    content: btoa(url),
+                    sha: await getFileSha('request.txt')
+                })
+            });
+            if (response.ok) {
+                alert('Request sent successfully!');
+            } else {
+                alert('Error sending the request');
+            }
         }
 
         async function loadResponseFile() {
             try {
-                const response = await fetch('./response.txt');
+                const response = await fetch('https://raw.githubusercontent.com/username/repository/branch/response.txt');
                 const data = await response.text();
                 document.getElementById('responseContent').textContent = data;
             } catch (error) {
                 console.error('Error fetching the file:', error);
                 document.getElementById('responseContent').textContent = 'Error fetching the file';
             }
+        }
+
+        async function getFileSha(path) {
+            const response = await fetch(`https://api.github.com/repos/username/repository/contents/${path}`, {
+                headers: { 'Authorization': 'token YOUR_GITHUB_PERSONAL_ACCESS_TOKEN' }
+            });
+            if (!response.ok) return null;
+            const data = await response.json();
+            return data.sha;
         }
     </script>
 </body>
