@@ -34,7 +34,7 @@
             const response = await fetch('https://api.github.com/repos/petehuu/hae/dispatches', {
                 method: 'POST',
                 headers: {
-                    'Authorization': 'token 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',
+                    'Authorization': 'token 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',
                     'Content-Type': 'application/json',
                     'Accept': 'application/vnd.github.v3+json'
                 },
@@ -47,12 +47,12 @@
                 alert('Request sent successfully!');
             } else {
                 const errorText = await response.text();
-                alert(`Error sending the request: ${response.status} ${response.statusText}\n${errorText}`);
+                console.error(`Error sending the request: ${response.status} ${response.statusText}\n${errorText}`);
+                alert(`Error sending the request: ${response.status} ${response.statusText}`);
             }
         }
 
         async function loadResponseFile() {
-            // Tyhjennetään kenttä ennen latausta
             document.getElementById('responseContent').textContent = 'Waiting for response...';
 
             try {
