@@ -31,27 +31,36 @@
     <script>
         async function saveRequestFile() {
             const url = document.getElementById('urlInput').value;
-            const response = await fetch('https://api.github.com/repos/petehuu/hae/contents/request.txt', {
-                method: 'PUT',
-                headers: {
-                    'Authorization': '', // Ei aseteta arvoa suoraan
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    message: 'Add request URL',
-                    content: btoa(url),
-                    sha: await getFileSha('request.txt')
-                })
-            });
-            if (response.ok) {
-                alert('Request sent successfully!');
-            } else {
-                const errorText = await response.text();
-                alert(`Error sending the request: ${response.status} ${response.statusText}\n${errorText}`);
+            try {
+                const sha = await getFileSha('request.txt');
+                const response = await fetch('https://api.github.com/repos/petehuu/hae/contents/request.txt?ref=main', {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': '', // Ei aseteta arvoa suoraan
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: 'Add request URL',
+                        content: btoa(url),
+                        sha: sha
+                    })
+                });
+                if (response.ok) {
+                    alert('Request sent successfully!');
+                } else {
+                    const errorText = await response.text();
+                    alert(`Error sending the request: ${response.status} ${response.statusText}\n${errorText}`);
+                }
+            } catch (error) {
+                console.error(`Error: ${error.message}`);
+                alert(`Error: ${error.message}`);
             }
         }
 
         async function loadResponseFile() {
+            // Tyhjennetään kenttä ennen latausta
+            document.getElementById('responseContent').textContent = 'Waiting for response...';
+
             try {
                 const response = await fetch('https://raw.githubusercontent.com/petehuu/hae/main/response.txt');
                 if (response.ok) {
@@ -67,16 +76,21 @@
         }
 
         async function getFileSha(path) {
-            const response = await fetch(`https://api.github.com/repos/petehuu/hae/contents/${path}`, {
-                headers: { 'Authorization': '' } // Ei aseteta arvoa suoraan
-            });
-            if (!response.ok) {
-                const errorText = await response.text();
-                console.error(`Error fetching SHA: ${response.status} ${response.statusText}\n${errorText}`);
+            try {
+                const response = await fetch(`https://api.github.com/repos/petehuu/hae/contents/${path}?ref=main`, {
+                    headers: { 'Authorization': '' } // Ei aseteta arvoa suoraan
+                });
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error(`Error fetching SHA: ${response.status} ${response.statusText}\n${errorText}`);
+                    return null;
+                }
+                const data = await response.json();
+                return data.sha;
+            } catch (error) {
+                console.error(`Error: ${error.message}`);
                 return null;
             }
-            const data = await response.json();
-            return data.sha;
         }
     </script>
 </body>
