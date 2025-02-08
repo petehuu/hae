@@ -4,7 +4,7 @@ const app = express();
 const port = 3000;
 
 // Lisää oma henkilökohtainen käyttöoikeustunnus (PAT) tähän
-const GITHUB_TOKEN = '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';
+const GITHUB_TOKEN = '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';
 
 app.use(express.json());
 
