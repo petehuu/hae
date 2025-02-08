@@ -29,6 +29,8 @@
     <pre id="responseContent">Waiting for response...</pre>
 
     <script>
+        const apiKey = 'API_KEY_PLACEHOLDER';
+
         async function sendRequest() {
             const url = document.getElementById('urlInput').value;
             const data = JSON.stringify({
@@ -44,7 +46,7 @@
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    //'Authorization': `token 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`,
+                    'Authorization': `token ${apiKey}`
                 },
                 body: data
             });
