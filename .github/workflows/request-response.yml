@@ -27,10 +27,10 @@ jobs:
 
     - name: Commit and push response file
       env:
-        GH_TOKEN: ${{ secrets.GH_TOKEN }} # Käyttää GitHub-repositorion salaisuutta
+        GH_TOKEN_HAE: ${{ secrets.GH_TOKEN_HAE }}  # Käytetään uutta salaisuutta
       run: |
         git config --global user.name 'github-actions[bot]'
         git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
         git add response.txt
         git commit -m 'Add response content'
-        git push https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/petehuu/hae.git
+        git push https://x-access-token:${{ secrets.GH_TOKEN_HAE }}@github.com/petehuu/hae.git
