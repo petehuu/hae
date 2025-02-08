@@ -61,8 +61,13 @@
         async function loadResponseFile() {
             try {
                 const response = await fetch('https://raw.githubusercontent.com/petehuu/hae/main/response.txt');
-                const data = await response.text();
-                document.getElementById('responseContent').textContent = data;
+                if (response.ok) {
+                    const data = await response.text();
+                    document.getElementById('responseContent').textContent = data;
+                } else {
+                    console.error(`Error fetching the file: ${response.status} ${response.statusText}`);
+                    document.getElementById('responseContent').textContent = `Error fetching the file: ${response.status} ${response.statusText}`;
+                }
             } catch (error) {
                 console.error('Error fetching the file:', error);
                 document.getElementById('responseContent').textContent = 'Error fetching the file';
