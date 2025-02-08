@@ -22,8 +22,7 @@ jobs:
     - name: Update request file
       run: |
         URL=${{ github.event.inputs.url }}
-        echo "" > request.txt  # Tyhjennetään request.txt
-        echo "$URL" >> request.txt  # Lisätään URL request.txt-tiedostoon
+        echo "$URL" > request.txt  # Kirjoitetaan URL suoraan tiedostoon ilman tyhjää riviä
         git config --global user.name 'github-actions[bot]'
         git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
         git add request.txt
@@ -32,6 +31,8 @@ jobs:
 
     - name: Fetch URL content and update response file
       run: |
+        URL=${{ github.event.inputs.url }}
+        echo "Fetching content from URL: $URL"
         CONTENT=$(curl -s $URL)
         echo "$CONTENT" > response.txt
         git add response.txt
