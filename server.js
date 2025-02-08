@@ -1,10 +1,13 @@
 const express = require('express');
 const axios = require('axios');
+const dotenv = require('dotenv');
+dotenv.config();
+
 const app = express();
 const port = 3000;
 
-// Lisää oma henkilökohtainen käyttöoikeustunnus (PAT) tähän
-const GITHUB_TOKEN = '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';
+// Henkilökohtainen käyttöoikeustunnus ympäristömuuttujasta
+const GITHUB_TOKEN = process.env.GH_OMA;
 
 app.use(express.json());
 
