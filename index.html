@@ -26,7 +26,7 @@
     <button onclick="saveRequestFile()">Send Request</button>
     <br><br>
     <button onclick="loadResponseFile()">Load Response</button>
-    <pre id="responseContent">Waiting for response....</pre>
+    <pre id="responseContent">Waiting for response...</pre>
 
     <script>
         async function saveRequestFile() {
@@ -34,7 +34,7 @@
             const response = await fetch('https://api.github.com/repos/petehuu/hae/dispatches', {
                 method: 'POST',
                 headers: {
-                    'Authorization': 'token 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',
+                    'Authorization': 'token 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',
                     'Content-Type': 'application/json',
                     'Accept': 'application/vnd.github.v3+json'
                 },
