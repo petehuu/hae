@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Communicate via File</title>
+</head>
+<body>
+    <h1>Communicate via File</h1>
+    <textarea id="urlInput" rows="1" cols="50">Enter the URL here...</textarea>
+    <br>
+    <button onclick="saveRequestFile()">Send Request</button>
+    <br><br>
+    <button onclick="loadResponseFile()">Load Response</button>
+    <pre id="responseContent">Waiting for response...</pre>
+
+    <script>
+        function saveRequestFile() {
+            const url = document.getElementById('urlInput').value;
+            const blob = new Blob([url], { type: 'text/plain' });
+            const link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = 'request.txt';
+            link.click();
+            window.URL.revokeObjectURL(link.href);
+        }
+
+        async function loadResponseFile() {
+            try {
+                const response = await fetch('./response.txt');
+                const data = await response.text();
+                document.getElementById('responseContent').textContent = data;
+            } catch (error) {
+                console.error('Error fetching the file:', error);
+                document.getElementById('responseContent').textContent = 'Error fetching the file';
+            }
+        }
+    </script>
+</body>
+</html>
