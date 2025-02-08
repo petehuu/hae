@@ -1,6 +1,8 @@
 const express = require('express');
 const axios = require('axios');
 const dotenv = require('dotenv');
+
+// Lataa ympäristömuuttujat .env-tiedostosta
 dotenv.config();
 
 const app = express();
